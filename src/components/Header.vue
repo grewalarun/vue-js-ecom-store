@@ -2,11 +2,8 @@
   <nav class="w-full bg-primary">
     <div class="max-w-6xl mx-auto px-6">
       <div class="flex items-center justify-between h-16">
-
         <!-- Logo -->
-        <RouterLink to="/" class="text-text-light font-bold text-xl">
-          Logo
-        </RouterLink>
+        <RouterLink to="/" class="text-text-light font-bold text-xl"> Logo </RouterLink>
 
         <!-- Desktop Menu -->
         <ul class="hidden md:flex items-center h-full gap-2">
@@ -17,16 +14,13 @@
             :to="item.to"
             :variant="item.variant"
           />
+          <div>CART(0)</div>
         </ul>
 
         <!-- Mobile Hamburger -->
-        <button
-          class="md:hidden text-text-light"
-          @click="mobileOpen = !mobileOpen"
-        >
+        <button class="md:hidden text-text-light" @click="mobileOpen = !mobileOpen">
           <span class="text-2xl">☰</span>
         </button>
-
       </div>
 
       <!-- Mobile Menu -->
@@ -39,7 +33,6 @@
           :variant="item.variant"
         />
       </ul>
-
     </div>
   </nav>
 </template>
@@ -51,8 +44,8 @@ import MenuItem from '../shared/ui/MenuItem.vue'
 const mobileOpen = ref(false)
 
 const navItems = [
-  { label: 'Home',    to: '/',        variant: 'ghost' },
-  { label: 'About',   to: '/aboutus',   variant: 'ghost' },
-  { label: 'Contact', to: '/contactus', variant: 'solid' },  // CTA button
+  { label: 'Home', to: '/', variant: 'ghost' },
+  { label: 'About', to: '/aboutus', variant: 'ghost' },
+  { label: 'Contact', to: '/contactus', variant: 'ghost' }, // CTA button
 ]
 </script>
