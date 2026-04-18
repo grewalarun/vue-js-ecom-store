@@ -14,7 +14,12 @@
             :to="item.to"
             :variant="item.variant"
           />
-          <div>CART(0)</div>
+          <div @click="emit('open-cart')">
+            CART
+            <v-badge location="top right" color="secondary-600" :content="cart.cart.length">
+              <v-icon icon="mdi-cart"></v-icon>
+            </v-badge>
+          </div>
         </ul>
 
         <!-- Mobile Hamburger -->
@@ -40,6 +45,9 @@
 <script setup>
 import { ref } from 'vue'
 import MenuItem from '../shared/ui/MenuItem.vue'
+import { useCartStore } from '@/stores/counter'
+const emit = defineEmits(['open-cart'])
+const cart = useCartStore()
 
 const mobileOpen = ref(false)
 

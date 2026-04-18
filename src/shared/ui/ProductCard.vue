@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useCartStore } from '@/stores/counter'
+import { computed } from 'vue'
+
 interface Props {
   id: number
   name: string
@@ -12,9 +15,27 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits(['click'])
 
-const handleAddToCart = () => {
+const cart = useCartStore()
+const isAdded = computed(() => cart.isInCart(props.id))
+
+const handleCartAction = (props: Omit<Props, 'quantity'>) => {
+  if (isAdded.value) {
+    cart.removeCart(props.id)
+  } else {
+    cart.addToCart(props)
+  }
+}
+
+const handleAddCart = (x: Omit<Props, 'quantity'>) => {
   console.log('Add to cart:', props.id)
-  // your cart logic here
+
+  cart.addToCart(x)
+}
+
+const handleRemoveCart = (x: Omit<Props, 'quantity'>) => {
+  console.log('Add to cart:', props.id)
+
+  cart.removeCart(x.id)
 }
 </script>
 
@@ -63,12 +84,14 @@ const handleAddToCart = () => {
       <div class="mt-auto flex items-center justify-between">
         <span class="text-lg font-bold text-primary-600"> ₹{{ props.price }} </span>
         <v-btn
-          icon="mdi-cart"
-          size="small"
-          variant="tonal"
           color="primary"
-          @click.stop="handleAddToCart"
-        />
+          size="large"
+          rounded="lg"
+          class="px-6 text-text-light"
+          @click.stop="handleCartAction(props)"
+        >
+          {{ isAdded ? 'Remove from Cart' : 'Add to Cart' }}
+        </v-btn>
       </div>
     </v-card-text>
   </v-card>

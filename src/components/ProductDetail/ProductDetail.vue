@@ -6,11 +6,26 @@ import { useQuery } from '@tanstack/vue-query'
 import OtherProducts from './OtherProducts.vue'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useCartStore } from '@/stores/counter'
 
 const props = defineProps<{
   id: string
 }>()
 const route = useRoute()
+
+interface ID {
+  id: number
+}
+
+interface Props {
+  id: number
+  name: string
+  category: string
+  image: string
+  price: number
+  rating: number
+  reviews: number
+}
 
 const productId = computed(() => route.params.id as string)
 
@@ -18,6 +33,21 @@ const { data, isLoading, isError } = useQuery({
   queryKey: computed(() => ['product', productId.value]),
   queryFn: () => fetchSingleProduct(productId.value),
 })
+
+const cart = useCartStore()
+
+const isAdded = computed(() => {
+  const id = data.value?.id
+  return id ? cart.isInCart(id) : false
+})
+
+const handleCartAction = (props: Omit<Props, 'quantity'>) => {
+  if (isAdded.value) {
+    cart.removeCart(props.id)
+  } else {
+    cart.addToCart(props)
+  }
+}
 </script>
 
 <template>
@@ -60,9 +90,7 @@ const { data, isLoading, isError } = useQuery({
         </div>
 
         <!-- Price -->
-        <div class="text-2xl font-bold text-primary-600 mb-6">
-          ₹{{ Math.round(data.price * 80) }}
-        </div>
+        <div class="text-2xl font-bold text-primary-600 mb-6">${{ Math.round(data.price) }}</div>
 
         <!-- Description -->
         <p class="text-text-muted mb-6 leading-relaxed">
@@ -72,13 +100,23 @@ const { data, isLoading, isError } = useQuery({
         <!-- Actions -->
         <div class="flex gap-4">
           <v-btn
-            color="primary-600"
-            class="px-4 text-text-light"
+            color="primary"
             size="x-large"
             rounded="lg"
-            prepend-icon="mdi-cart"
+            class="px-6 text-text-light"
+            @click.stop="
+              handleCartAction({
+                id: data.id,
+                name: data.title,
+                category: data.category,
+                image: data.image,
+                price: data.price,
+                rating: data.rating.rate,
+                reviews: data.rating.count,
+              })
+            "
           >
-            Add to Cart
+            {{ isAdded ? 'Remove from Cart' : 'Add to Cart' }}
           </v-btn>
 
           <v-btn

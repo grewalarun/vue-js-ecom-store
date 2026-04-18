@@ -17,7 +17,27 @@
             variant="flat"
             @click="contX.increment"
           >
-            Create Event
+            Add +1
+          </v-btn>
+          <v-btn
+            class="text-none text-body-large"
+            color="bg-secondary-400 p-4"
+            rounded="lg"
+            size="large"
+            variant="flat"
+            @click="contX.decrement"
+          >
+            Add -1
+          </v-btn>
+          <v-btn
+            class="text-none text-body-large"
+            color="bg-secondary-400 p-4"
+            rounded="lg"
+            size="large"
+            variant="flat"
+            @click="contX.reset"
+          >
+            Reset
           </v-btn>
         </v-card-actions>
       </v-card-item>
